@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="10">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight="8"
+        android:orientation="vertical">
+        <android.support.v7.widget.RecyclerView
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/trip_recycler_view"
+            android:visibility="gone"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+        </android.support.v7.widget.RecyclerView>
+        <TextView
+            android:padding="16dp"
+            android:id="@+id/no_trips_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="24sp"
+            android:text="Click the + to add a new Trip."
+            android:visibility="visible"/>
+        <!--
+        <include layout="@layout/trip_item"/>
+        <include layout="@layout/trip_item"/>
+        <include layout="@layout/trip_item"/>
+        <include layout="@layout/trip_item"/>
+        <include layout="@layout/trip_item"/>
+        <include layout="@layout/trip_item"/>
+        <include layout="@layout/trip_item"/>
+        -->
+    </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="2"
+    android:gravity="center|right"
+    android:padding="10dp">
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/add_fab"
+        android:onClick="onClickAddTripFab" />
+</LinearLayout>
+
+
+</LinearLayout>

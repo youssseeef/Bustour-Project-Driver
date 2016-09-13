@@ -1,0 +1,50 @@
+{
+  "project_info": {
+    "project_number": "61342361748",
+    "firebase_url": "https://bus-tour-project.firebaseio.com",
+    "project_id": "bus-tour-project",
+    "storage_bucket": "bus-tour-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:61342361748:android:16818f8e5c3602a0",
+        "android_client_info": {
+          "package_name": "eg.alexu.eng.mobdev.bustourdriverside"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "61342361748-ed6p43v3ivpluvkn1fq336rkkgj4di6e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eg.alexu.eng.mobdev.bustourdriverside",
+            "certificate_hash": "3776D6889615BC4B0C1B1D333716BC6C47DBF14B"
+          }
+        },
+        {
+          "client_id": "61342361748-j4c08rb40ud7m3urhsbq74ijvibblj3v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtt2CIbcFQ1jEf0fL0mVX1O99tdWosh9M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
