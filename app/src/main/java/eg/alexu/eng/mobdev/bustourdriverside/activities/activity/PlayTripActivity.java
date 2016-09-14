@@ -125,7 +125,6 @@ public class PlayTripActivity extends AppCompatActivity {
             }, 1000 * 60 * 60 * 2);
         }
     }
-
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -145,8 +144,10 @@ public class PlayTripActivity extends AppCompatActivity {
                 child(Constants.LOC_X).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                locX = Double.parseDouble(dataSnapshot.getValue(String.class));
-                updateDistances();
+                if (dataSnapshot.exists()) {
+                    locX = Double.parseDouble(dataSnapshot.getValue(String.class));
+                    updateDistances();
+                }
             }
 
             @Override
@@ -161,8 +162,10 @@ public class PlayTripActivity extends AppCompatActivity {
                 child(Constants.LOC_Y).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                locY = Double.parseDouble(dataSnapshot.getValue(String.class));
-                updateDistances();
+                if (dataSnapshot.exists()) {
+                    locY = Double.parseDouble(dataSnapshot.getValue(String.class));
+                    updateDistances();
+                }
             }
 
             @Override
@@ -183,7 +186,7 @@ public class PlayTripActivity extends AppCompatActivity {
                         addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (locX != 0.0 && locY != 0.0) {
+                                if (dataSnapshot.exists() && locX != 0.0 && locY != 0.0) {
                                     HashMap<String, String> tempMap = (HashMap<String, String>) dataSnapshot.getValue();
                                     double distance = CalculateDistanceBetweenTwoPoint.distanceBetweenTwoCoordinates
                                             (locX, Double.parseDouble(tempMap.get(Constants.LOC_X)), locY, Double.parseDouble(tempMap.get(Constants.LOC_Y)));
@@ -224,7 +227,8 @@ public class PlayTripActivity extends AppCompatActivity {
                 addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        modifyUsersId(dataSnapshot);
+                        if(dataSnapshot.exists())
+                            modifyUsersId(dataSnapshot);
                     }
 
                     @Override
@@ -250,8 +254,10 @@ public class PlayTripActivity extends AppCompatActivity {
     private void modifyUsersId(DataSnapshot dataSnapshot) {
         HashMap<String, String> temp = (HashMap<String, String>) dataSnapshot.getValue();
         List<String> usersId = new ArrayList<String>();
-        for (String userId : temp.keySet()) {
-            usersId.add(userId);
+        if(temp != null) {
+            for (String userId : temp.keySet()) {
+                usersId.add(userId);
+            }
         }
         this.usersId = usersId;
         mAdapter.updateListUsersId(usersId, mTripId);

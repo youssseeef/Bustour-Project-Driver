@@ -52,7 +52,7 @@ public class Model {
         return newUser;
     }
 
-    public void submitDataFirstTime(String userId, String name, String phone, String busNum, boolean newUser) {
+    public void submitDataFirstTime(String userId, String name, String phone, boolean newUser) {
         Uri url = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
         String urlString = url != null ? url.toString() : "error";
         HashMap<String, Object> temp = new HashMap<>();

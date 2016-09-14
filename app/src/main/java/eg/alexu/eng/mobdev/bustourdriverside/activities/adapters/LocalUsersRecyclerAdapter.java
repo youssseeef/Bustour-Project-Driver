@@ -1,6 +1,7 @@
 package eg.alexu.eng.mobdev.bustourdriverside.activities.adapters;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -26,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 import eg.alexu.eng.mobdev.bustourdriverside.R;
+import eg.alexu.eng.mobdev.bustourdriverside.activities.service.DriverLocationService;
 import eg.alexu.eng.mobdev.bustourdriverside.activities.utilities.Constants;
 
 
@@ -141,6 +143,10 @@ public class LocalUsersRecyclerAdapter extends RecyclerView.Adapter<LocalUsersRe
                                 child(Constants.USER_IN_TRIP).
                                 child(userId).
                                 removeValue();
+                        dbRef.child(Constants.USERS).
+                                child(userId).
+                                child(Constants.TRIPS).
+                                child(mTripId).removeValue();
                         Toast.makeText(v.getContext(), R.string.user_deleted, Toast.LENGTH_LONG).show();
                         dialog.cancel();
                     }

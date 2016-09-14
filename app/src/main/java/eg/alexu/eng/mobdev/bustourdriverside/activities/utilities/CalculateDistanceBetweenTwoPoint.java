@@ -2,7 +2,7 @@ package eg.alexu.eng.mobdev.bustourdriverside.activities.utilities;
 
 public abstract class CalculateDistanceBetweenTwoPoint {
 
-    public final static double RING_DISTANCE = 50.0;
+    public final static double RING_DISTANCE = 200.0;
 
     public static double distanceBetweenTwoCoordinates (double lat1, double lat2, double lon1,
                              double lon2) {

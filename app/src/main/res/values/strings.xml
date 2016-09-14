@@ -14,4 +14,6 @@
     <string name="done">Done</string>
     <string name="continue_trip">Do you want to stop this trip ?</string>
     <string name="title_activity_all_users_location_on_map">Map</string>
+    <string name="trip_empty">This trip is empty</string>
+    <string name="close_service">Do you want to close the current running trip and open another one?</string>
 </resources>

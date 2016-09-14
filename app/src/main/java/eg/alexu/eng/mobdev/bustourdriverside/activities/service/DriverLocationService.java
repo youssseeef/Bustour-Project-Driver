@@ -25,7 +25,7 @@ public class DriverLocationService extends Service {
     private LocationManager mLocationManager = null;
     private static final int LOCATION_INTERVAL = 60000;
     private static final float LOCATION_DISTANCE = 20f;
-    private String mTripId;
+    public static String mTripId;
 
     private LocationListener[] mLocationListeners = new LocationListener[]{
             new LocationListener(LocationManager.GPS_PROVIDER),
@@ -115,6 +115,7 @@ public class DriverLocationService extends Service {
     @Override
     public void onDestroy() {
         Log.e(TAG, "onDestroy");
+        mTripId = null;
         super.onDestroy();
         if (mLocationManager != null) {
             for (int i = 0; i < mLocationListeners.length; i++) {

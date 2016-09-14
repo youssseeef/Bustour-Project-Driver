@@ -12,9 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 import eg.alexu.eng.mobdev.bustourdriverside.R;
@@ -22,6 +26,7 @@ import eg.alexu.eng.mobdev.bustourdriverside.activities.activity.AllUsersLocatio
 import eg.alexu.eng.mobdev.bustourdriverside.activities.activity.PlayTripActivity;
 import eg.alexu.eng.mobdev.bustourdriverside.activities.activity.UserLocalList;
 import eg.alexu.eng.mobdev.bustourdriverside.activities.model.DriverTripsModel;
+import eg.alexu.eng.mobdev.bustourdriverside.activities.service.DriverLocationService;
 import eg.alexu.eng.mobdev.bustourdriverside.activities.utilities.Constants;
 import eg.alexu.eng.mobdev.bustourdriverside.activities.utilities.Extras;
 
@@ -66,12 +71,73 @@ public class TripMenuRecyclerAdapter extends RecyclerView.Adapter<TripMenuRecycl
                         child(tripId).
                         child(Constants.ENABLE_TRACKING).
                         setValue("true");
-                Intent intent = new Intent(v.getContext(), PlayTripActivity.class);
-                intent.putExtra(Extras.TRIP_ID, tripId);
-                v.getContext().startActivity(intent);
+                usersExistInTrip(v, tripId);
             }
         });
 
+    }
+
+    private void usersExistInTrip(final View v,final String tripId) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        dbRef.child(Constants.DRIVERS).
+                child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                child(Constants.TRIPS).
+                child(tripId).
+                child(Constants.USER_IN_TRIP).
+                addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()) {
+                            if (DriverLocationService.mTripId == null || DriverLocationService.mTripId.equals(tripId)) {
+                                Intent intent = new Intent(v.getContext(), PlayTripActivity.class);
+                                intent.putExtra(Extras.TRIP_ID, tripId);
+                                v.getContext().startActivity(intent);
+                            } else {
+                                makeAlertForClosingService(v, tripId);
+                            }
+                        }else {
+                            Toast.makeText(v.getContext(), R.string.trip_empty, Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void makeAlertForClosingService(final View v, final String tripId) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(v.getContext());
+        builder1.setMessage(R.string.close_service);
+        builder1.setCancelable(true);
+        builder1.setPositiveButton(
+                "Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        processStopService(v, tripId);
+                        Intent intent = new Intent(v.getContext(), PlayTripActivity.class);
+                        intent.putExtra(Extras.TRIP_ID, tripId);
+                        v.getContext().startActivity(intent);
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
+    private void processStopService(View v, final String tag) {
+        if (tag.equals(DriverLocationService.mTripId)) {
+            Intent intent = new Intent(v.getContext(), DriverLocationService.class);
+            intent.addCategory(tag);
+            v.getContext().stopService(intent);
+        }
     }
 
     private void onClickListenerForAllUsersLocation(ViewHolder holder, final String tripId) {
@@ -112,12 +178,37 @@ public class TripMenuRecyclerAdapter extends RecyclerView.Adapter<TripMenuRecycl
         builder1.setPositiveButton(
                 "Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+                        processStopService(v, tripId);
+                        final DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
                         dbRef.child(Constants.DRIVERS).
                                 child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
                                 child(Constants.TRIPS).
                                 child(tripId).
-                                removeValue();
+                                child(Constants.USER_IN_TRIP).
+                                addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        HashMap<String, String> map = (HashMap<String, String>) dataSnapshot.getValue();
+                                        if (map != null) {
+                                            for (String s : map.keySet()) {
+                                                dbRef.child(Constants.USERS).
+                                                        child(s).
+                                                        child(Constants.TRIPS).
+                                                        child(tripId).removeValue();
+                                            }
+                                        }
+                                        dbRef.child(Constants.DRIVERS).
+                                                child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                                                child(Constants.TRIPS).
+                                                child(tripId).
+                                                removeValue();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                         Toast.makeText(v.getContext(), R.string.trip_deleted, Toast.LENGTH_LONG).show();
                         dialog.cancel();
                     }
