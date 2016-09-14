@@ -56,7 +56,8 @@ public class AddingUserRecyclerAdapter extends RecyclerView.Adapter<AddingUserRe
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        holder.userName.setText(dataSnapshot.getValue(String.class));
+                        if (dataSnapshot.exists())
+                            holder.userName.setText(dataSnapshot.getValue(String.class));
                     }
 
                     @Override
@@ -74,7 +75,8 @@ public class AddingUserRecyclerAdapter extends RecyclerView.Adapter<AddingUserRe
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        holder.phoneNum.setText(dataSnapshot.getValue(String.class));
+                        if (dataSnapshot.exists())
+                            holder.phoneNum.setText(dataSnapshot.getValue(String.class));
                     }
 
                     @Override
@@ -101,7 +103,7 @@ public class AddingUserRecyclerAdapter extends RecyclerView.Adapter<AddingUserRe
                                     .placeholder(R.drawable.user)
                                     .error(R.drawable.user)
                                     .centerCrop()
-                                    .override(20, 20).
+                                    .override(40, 40).
                                     into(new BitmapImageViewTarget(holder.userPhoto) {
                                         @Override
                                         protected void setResource(Bitmap resource) {

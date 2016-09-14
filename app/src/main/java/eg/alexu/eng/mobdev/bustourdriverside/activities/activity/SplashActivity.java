@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,7 +27,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         imageView = (ImageView) findViewById(R.id.image_splash);
-        initializeFirebase();
         Model.getInstance().isANewUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -37,18 +37,10 @@ public class SplashActivity extends AppCompatActivity {
         TextView tx = (TextView) findViewById(R.id.text_view_title);
 
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/main_font.ttf");
-
+        assert tx != null;
         tx.setTypeface(custom_font);
+        assert getSupportActionBar() != null;
         getSupportActionBar().hide();
-
-
-    }
-
-    private void initializeFirebase() {
-        Firebase.setAndroidContext(this);
-        if (Firebase.getDefaultConfig().isPersistenceEnabled() == false) {
-            Firebase.getDefaultConfig().setPersistenceEnabled(true);
-        }
     }
 
     private void checkIsANewUser() {

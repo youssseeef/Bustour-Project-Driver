@@ -58,9 +58,11 @@ public class ProfileActivity extends AppCompatActivity {
                     addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            String name = dataSnapshot.child(Constants.NAME).getValue(String.class);
-                            String phone = dataSnapshot.child(Constants.PHONE).getValue(String.class);
-                            setProfile(name, phone);
+                            if (dataSnapshot.exists()) {
+                                String name = dataSnapshot.child(Constants.NAME).getValue(String.class);
+                                String phone = dataSnapshot.child(Constants.PHONE).getValue(String.class);
+                                setProfile(name, phone);
+                            }
                         }
 
                         @Override

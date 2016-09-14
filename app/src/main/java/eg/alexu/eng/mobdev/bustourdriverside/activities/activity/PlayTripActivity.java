@@ -43,13 +43,14 @@ public class PlayTripActivity extends AppCompatActivity {
     private double locY;
     private List<String> usersId;
     private boolean isAppExit;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_trip);
         mTripId = getIntent().getStringExtra(Extras.TRIP_ID);
-        locX = 0;
-        locY = 0;
+        locX = 0.0;
+        locY = 0.0;
         isAppExit = false;
         launchService();
         initializeRecyclerView();
@@ -65,7 +66,7 @@ public class PlayTripActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(!isAppExit) {
+        if (!isAppExit) {
             stopService();
         }
     }
@@ -125,6 +126,7 @@ public class PlayTripActivity extends AppCompatActivity {
             }, 1000 * 60 * 60 * 2);
         }
     }
+
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -144,7 +146,7 @@ public class PlayTripActivity extends AppCompatActivity {
                 child(Constants.LOC_X).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists() && !dataSnapshot.getValue(String.class).equals(Constants.NO_VALUE)) {
                     locX = Double.parseDouble(dataSnapshot.getValue(String.class));
                     updateDistances();
                 }
@@ -162,7 +164,7 @@ public class PlayTripActivity extends AppCompatActivity {
                 child(Constants.LOC_Y).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists() && !dataSnapshot.getValue(String.class).equals(Constants.NO_VALUE)) {
                     locY = Double.parseDouble(dataSnapshot.getValue(String.class));
                     updateDistances();
                 }
@@ -188,21 +190,23 @@ public class PlayTripActivity extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists() && locX != 0.0 && locY != 0.0) {
                                     HashMap<String, String> tempMap = (HashMap<String, String>) dataSnapshot.getValue();
-                                    double distance = CalculateDistanceBetweenTwoPoint.distanceBetweenTwoCoordinates
-                                            (locX, Double.parseDouble(tempMap.get(Constants.LOC_X)), locY, Double.parseDouble(tempMap.get(Constants.LOC_Y)));
-                                    DriverTripsModel.setUserDistance(mTripId, userId, (int) distance);
-                                    if (CalculateDistanceBetweenTwoPoint.checkTargetReached(distance)) {
-                                        dbRef.child(Constants.USERS).
-                                                child(userId).
-                                                child(Constants.TRIPS).
-                                                child(mTripId).
-                                                child(Constants.ARRIVED).setValue("true");
-                                    } else {
-                                        dbRef.child(Constants.USERS).
-                                                child(userId).
-                                                child(Constants.TRIPS).
-                                                child(mTripId).
-                                                child(Constants.ARRIVED).setValue("false");
+                                    if (!tempMap.get(Constants.LOC_X).equals(Constants.NO_VALUE) && !tempMap.get(Constants.LOC_Y).equals(Constants.NO_VALUE)) {
+                                        double distance = CalculateDistanceBetweenTwoPoint.distanceBetweenTwoCoordinates
+                                                (locX, Double.parseDouble(tempMap.get(Constants.LOC_X)), locY, Double.parseDouble(tempMap.get(Constants.LOC_Y)));
+                                        DriverTripsModel.setUserDistance(mTripId, userId, (int) distance);
+                                        if (CalculateDistanceBetweenTwoPoint.checkTargetReached(distance)) {
+                                            dbRef.child(Constants.USERS).
+                                                    child(userId).
+                                                    child(Constants.TRIPS).
+                                                    child(mTripId).
+                                                    child(Constants.ARRIVED).setValue("true");
+                                        } else {
+                                            dbRef.child(Constants.USERS).
+                                                    child(userId).
+                                                    child(Constants.TRIPS).
+                                                    child(mTripId).
+                                                    child(Constants.ARRIVED).setValue("false");
+                                        }
                                     }
                                 }
                             }
@@ -227,8 +231,7 @@ public class PlayTripActivity extends AppCompatActivity {
                 addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists())
-                            modifyUsersId(dataSnapshot);
+                        modifyUsersId(dataSnapshot);
                     }
 
                     @Override
@@ -254,17 +257,17 @@ public class PlayTripActivity extends AppCompatActivity {
     private void modifyUsersId(DataSnapshot dataSnapshot) {
         HashMap<String, String> temp = (HashMap<String, String>) dataSnapshot.getValue();
         List<String> usersId = new ArrayList<String>();
-        if(temp != null) {
+        if (temp != null) {
             for (String userId : temp.keySet()) {
                 usersId.add(userId);
             }
         }
         this.usersId = usersId;
-        mAdapter.updateListUsersId(usersId, mTripId);
+        mAdapter.updateListUsersId(usersId);
     }
 
     private void initializeRecyclerView() {
-        mAdapter = new PlayTripAdapter();
+        mAdapter = new PlayTripAdapter(mTripId);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 

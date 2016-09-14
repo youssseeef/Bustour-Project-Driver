@@ -29,7 +29,6 @@ public class Model {
         return modelInstance;
     }
 
-
     public void isANewUser(String userId) {
         dbRef.child(Constants.DRIVERS).child(userId).
                 addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {

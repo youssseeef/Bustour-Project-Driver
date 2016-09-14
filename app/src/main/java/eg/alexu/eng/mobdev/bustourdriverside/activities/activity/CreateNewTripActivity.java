@@ -56,8 +56,8 @@ public class CreateNewTripActivity extends AppCompatActivity {
             Map<String, String> m2 = new HashMap<String, String>();
             m2.put(Constants.NAME, mTripName.getText().toString().trim());
             m2.put(Constants.DESCRIPTION, mTripDescription.getText().toString().trim());
-            m2.put(Constants.LOC_X, "0.0");
-            m2.put(Constants.LOC_Y, "0.0");
+            m2.put(Constants.LOC_X, Constants.NO_VALUE);
+            m2.put(Constants.LOC_Y, Constants.NO_VALUE);
             m2.put(Constants.ENABLE_TRACKING, "false");
             long uniqueVar = System.currentTimeMillis();
             String tripId = "trip" + uniqueVar;

@@ -43,7 +43,7 @@ public class AllUsersLocationOnMapActivity extends FragmentActivity implements O
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         mTripId = getIntent().getStringExtra(Extras.TRIP_ID);
 
         final DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
@@ -55,39 +55,47 @@ public class AllUsersLocationOnMapActivity extends FragmentActivity implements O
                 addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        HashMap<String, String> map = (HashMap<String, String>) dataSnapshot.getValue();
-                        for (final String user : map.keySet()) {
-                            dbRef.child(Constants.USERS)
-                                    .child(user)
-                                    .child(Constants.TRIPS)
-                                    .child(mTripId).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    final LatLng pos = new LatLng(Double.parseDouble(dataSnapshot.child(Constants.LOC_X).getValue(String.class)),
-                                            Double.parseDouble(dataSnapshot.child(Constants.LOC_Y).getValue(String.class)));
-                                    if(pos.latitude != 0 && pos.longitude != 0) {
-                                        dbRef.child(Constants.USERS).
-                                                child(user).
-                                                child(Constants.NAME).
-                                                addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                                        mMap.addMarker(new MarkerOptions().position(pos).title(dataSnapshot.getValue(String.class) + "'s pickup location"));
-                                                    }
+                        if (dataSnapshot.exists()) {
+                            HashMap<String, String> map = (HashMap<String, String>) dataSnapshot.getValue();
+                            for (final String user : map.keySet()) {
+                                dbRef.child(Constants.USERS)
+                                        .child(user)
+                                        .child(Constants.TRIPS)
+                                        .child(mTripId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            String latitude = dataSnapshot.child(Constants.LOC_X).getValue(String.class);
+                                            String longitude = dataSnapshot.child(Constants.LOC_Y).getValue(String.class);
+                                            if (!latitude.equals(Constants.NO_VALUE) && !longitude.equals(Constants.NO_VALUE)) {
+                                                final LatLng pos = new LatLng(Double.parseDouble(latitude),
+                                                        Double.parseDouble(longitude));
+                                                dbRef.child(Constants.USERS).
+                                                        child(user).
+                                                        child(Constants.NAME).
+                                                        addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                if (dataSnapshot.exists())
+                                                                    mMap.addMarker(new MarkerOptions().position(pos).title(dataSnapshot.getValue(String.class) + "'s pickup location"));
+                                                            }
 
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
 
-                                                    }
-                                                });
+                                                            }
+                                                        });
+
+                                            }
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
 
-                                }
-                            });
+                                    }
+                                });
+                            }
                         }
                     }
 
@@ -103,12 +111,16 @@ public class AllUsersLocationOnMapActivity extends FragmentActivity implements O
                 child(mTripId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                LatLng pos = new LatLng(Double.parseDouble(dataSnapshot.child(Constants.LOC_X).getValue(String.class)),
-                        Double.parseDouble(dataSnapshot.child(Constants.LOC_Y).getValue(String.class)));
-                if(pos.latitude != 0 && pos.longitude != 0) {
-                    mMap.addMarker(new MarkerOptions().position(pos).title("Driver Location"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(18), 2000, null);
+                if (dataSnapshot.exists()) {
+                    String latitude = dataSnapshot.child(Constants.LOC_X).getValue(String.class);
+                    String longitude = dataSnapshot.child(Constants.LOC_Y).getValue(String.class);
+                    if (!latitude.equals(Constants.NO_VALUE) && !longitude.equals(Constants.NO_VALUE)) {
+                        LatLng pos = new LatLng(Double.parseDouble(latitude),
+                                Double.parseDouble(longitude));
+                        mMap.addMarker(new MarkerOptions().position(pos).title("Driver Location"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15));
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
+                    }
                 }
             }
 

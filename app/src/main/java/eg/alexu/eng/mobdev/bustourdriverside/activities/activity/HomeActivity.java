@@ -10,8 +10,7 @@ import eg.alexu.eng.mobdev.bustourdriverside.R;
 public class HomeActivity extends AppCompatActivity {
 
     public static Intent newIntent(AppCompatActivity callerActivity) {
-        Intent intent = new Intent(callerActivity, HomeActivity.class);
-        return intent;
+        return new Intent(callerActivity, HomeActivity.class);
     }
 
     @Override

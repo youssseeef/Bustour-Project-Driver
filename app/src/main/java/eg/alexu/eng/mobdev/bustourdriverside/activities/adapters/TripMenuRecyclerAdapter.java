@@ -77,7 +77,7 @@ public class TripMenuRecyclerAdapter extends RecyclerView.Adapter<TripMenuRecycl
 
     }
 
-    private void usersExistInTrip(final View v,final String tripId) {
+    private void usersExistInTrip(final View v, final String tripId) {
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
         dbRef.child(Constants.DRIVERS).
                 child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
@@ -87,7 +87,7 @@ public class TripMenuRecyclerAdapter extends RecyclerView.Adapter<TripMenuRecycl
                 addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()) {
+                        if (dataSnapshot.exists()) {
                             if (DriverLocationService.mTripId == null || DriverLocationService.mTripId.equals(tripId)) {
                                 Intent intent = new Intent(v.getContext(), PlayTripActivity.class);
                                 intent.putExtra(Extras.TRIP_ID, tripId);
@@ -95,7 +95,7 @@ public class TripMenuRecyclerAdapter extends RecyclerView.Adapter<TripMenuRecycl
                             } else {
                                 makeAlertForClosingService(v, tripId);
                             }
-                        }else {
+                        } else {
                             Toast.makeText(v.getContext(), R.string.trip_empty, Toast.LENGTH_LONG).show();
                         }
                     }
@@ -114,7 +114,7 @@ public class TripMenuRecyclerAdapter extends RecyclerView.Adapter<TripMenuRecycl
         builder1.setPositiveButton(
                 "Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        processStopService(v, tripId);
+                        processStopService(v, DriverLocationService.TAG);
                         Intent intent = new Intent(v.getContext(), PlayTripActivity.class);
                         intent.putExtra(Extras.TRIP_ID, tripId);
                         v.getContext().startActivity(intent);
@@ -133,11 +133,9 @@ public class TripMenuRecyclerAdapter extends RecyclerView.Adapter<TripMenuRecycl
     }
 
     private void processStopService(View v, final String tag) {
-        if (tag.equals(DriverLocationService.mTripId)) {
-            Intent intent = new Intent(v.getContext(), DriverLocationService.class);
-            intent.addCategory(tag);
-            v.getContext().stopService(intent);
-        }
+        Intent intent = new Intent(v.getContext(), DriverLocationService.class);
+        intent.addCategory(tag);
+        v.getContext().stopService(intent);
     }
 
     private void onClickListenerForAllUsersLocation(ViewHolder holder, final String tripId) {

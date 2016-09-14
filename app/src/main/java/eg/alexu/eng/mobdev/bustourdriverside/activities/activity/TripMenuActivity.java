@@ -84,32 +84,34 @@ public class TripMenuActivity extends AppCompatActivity {
     }
 
     private void changeTripDetails(DataSnapshot dataSnapshot) {
-        String tripId = dataSnapshot.getKey();
-        HashMap<String, String> tripDetails = (HashMap<String, String>) dataSnapshot.getValue();
-        String name = tripDetails.get(Constants.NAME);
-        String description = tripDetails.get(Constants.DESCRIPTION);
-        DriverTripsModel.addNewTrip(tripId, description, name);
-        mAdapter.updateList(DriverTripsModel.getTripIds());
-        if(mAllTripsRecyclerView.getAdapter().getItemCount()==0){
+        if (dataSnapshot.exists()) {
+            String tripId = dataSnapshot.getKey();
+            HashMap<String, String> tripDetails = (HashMap<String, String>) dataSnapshot.getValue();
+            String name = tripDetails.get(Constants.NAME);
+            String description = tripDetails.get(Constants.DESCRIPTION);
+            DriverTripsModel.addNewTrip(tripId, description, name);
+            mAdapter.updateList(DriverTripsModel.getTripIds());
+            showHideRecyclerView();
+        }
+    }
+
+    private void showHideRecyclerView() {
+        if (mAllTripsRecyclerView.getAdapter().getItemCount() == 0) {
             mAllTripsRecyclerView.setVisibility(View.GONE);
             mNoTripsLabel.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mAllTripsRecyclerView.setVisibility(View.VISIBLE);
             mNoTripsLabel.setVisibility(View.GONE);
         }
     }
 
     private void removeTrip(DataSnapshot dataSnapshot) {
-        String tripId = dataSnapshot.getKey();
-        HashMap<String,String> hm = (HashMap<String, String>) dataSnapshot.getValue();
-        DriverTripsModel.removeTrip(tripId);
-        mAdapter.updateList(DriverTripsModel.getTripIds());
-        if(mAllTripsRecyclerView.getAdapter().getItemCount()==0){
-            mAllTripsRecyclerView.setVisibility(View.GONE);
-            mNoTripsLabel.setVisibility(View.VISIBLE);
-        }else {
-            mAllTripsRecyclerView.setVisibility(View.VISIBLE);
-            mNoTripsLabel.setVisibility(View.GONE);
+        if (dataSnapshot.exists()) {
+            String tripId = dataSnapshot.getKey();
+            HashMap<String, String> hm = (HashMap<String, String>) dataSnapshot.getValue();
+            DriverTripsModel.removeTrip(tripId);
+            mAdapter.updateList(DriverTripsModel.getTripIds());
+            showHideRecyclerView();
         }
     }
 }

@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 
 import eg.alexu.eng.mobdev.bustourdriverside.R;
+import eg.alexu.eng.mobdev.bustourdriverside.activities.activity.PlayTripActivity;
 import eg.alexu.eng.mobdev.bustourdriverside.activities.model.DriverTripsModel;
 import eg.alexu.eng.mobdev.bustourdriverside.activities.recyclerview.SnappyRecyclerView;
 import eg.alexu.eng.mobdev.bustourdriverside.activities.utilities.CalculateDistanceBetweenTwoPoint;
@@ -33,6 +34,10 @@ public class PlayTripAdapter extends SnappyRecyclerView.Adapter<PlayTripAdapter.
     private List<String> usersId;
     private String mTripId;
     private boolean distanceFlag;
+
+    public PlayTripAdapter(String tripId) {
+        mTripId = tripId;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -96,12 +101,12 @@ public class PlayTripAdapter extends SnappyRecyclerView.Adapter<PlayTripAdapter.
             return;
         }
         holder.distanceRemaining.setText(distance + " meters");
-        if (distance > 1000)
+        if (distance > 100000)
             holder.distanceRemainingProgressBar.setProgress(0);
         else if (distance < CalculateDistanceBetweenTwoPoint.RING_DISTANCE) {
             holder.distanceRemainingProgressBar.setProgress(100);
         } else {
-            double temp = (distance - CalculateDistanceBetweenTwoPoint.RING_DISTANCE) / 10;
+            double temp = (distance - CalculateDistanceBetweenTwoPoint.RING_DISTANCE) / 1000;
             int finalProgress = 100 - (int) temp;
             holder.distanceRemainingProgressBar.setProgress(finalProgress);
         }
@@ -119,7 +124,8 @@ public class PlayTripAdapter extends SnappyRecyclerView.Adapter<PlayTripAdapter.
                 child(Constants.PHONE).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                holder.userPhone.setText(dataSnapshot.getValue(String.class));
+                if (dataSnapshot.exists())
+                 holder.userPhone.setText(dataSnapshot.getValue(String.class));
             }
 
             @Override
@@ -136,7 +142,8 @@ public class PlayTripAdapter extends SnappyRecyclerView.Adapter<PlayTripAdapter.
                 child(Constants.NAME).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                holder.userName.setText(dataSnapshot.getValue(String.class));
+                if (dataSnapshot.exists())
+                    holder.userName.setText(dataSnapshot.getValue(String.class));
             }
 
             @Override
@@ -151,9 +158,8 @@ public class PlayTripAdapter extends SnappyRecyclerView.Adapter<PlayTripAdapter.
         return usersId != null ? usersId.size() : 0;
     }
 
-    public void updateListUsersId(List<String> usersId, String tripId) {
+    public void updateListUsersId(List<String> usersId) {
         this.usersId = usersId;
-        mTripId = tripId;
         distanceFlag = false;
         notifyDataSetChanged();
     }

@@ -90,17 +90,21 @@ public class UserLocalList extends AppCompatActivity {
     }
 
     private void removeUserInTrip(DataSnapshot dataSnapshot) {
-        String userId = dataSnapshot.getKey();
-        DriverTripsModel.removeUserInATrip(mTripId, userId);
-        mAdapter.updateList(DriverTripsModel.getUsersInATrip(mTripId), mTripId);
-        chooseLabelOrRecyclerView();
+        if (dataSnapshot.exists()) {
+            String userId = dataSnapshot.getKey();
+            DriverTripsModel.removeUserInATrip(mTripId, userId);
+            mAdapter.updateList(DriverTripsModel.getUsersInATrip(mTripId), mTripId);
+            chooseLabelOrRecyclerView();
+        }
     }
 
     private void modifyUserInTrip(DataSnapshot dataSnapshot) {
-        String userId = dataSnapshot.getKey();
-        DriverTripsModel.addUserInATrip(mTripId, userId);
-        mAdapter.updateList(DriverTripsModel.getUsersInATrip(mTripId), mTripId);
-        chooseLabelOrRecyclerView();
+        if (dataSnapshot.exists()) {
+            String userId = dataSnapshot.getKey();
+            DriverTripsModel.addUserInATrip(mTripId, userId);
+            mAdapter.updateList(DriverTripsModel.getUsersInATrip(mTripId), mTripId);
+            chooseLabelOrRecyclerView();
+        }
     }
 
     private void chooseLabelOrRecyclerView() {

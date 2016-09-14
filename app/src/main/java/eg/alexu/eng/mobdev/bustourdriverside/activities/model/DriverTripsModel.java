@@ -42,10 +42,9 @@ public class DriverTripsModel {
     public static Integer getUserDistance (String tripId, String userId) {
         if (usersDistance == null)
             return -1;
-        return usersDistance.get(tripId).get(userId);
+        return usersDistance.get(tripId) != null ? usersDistance.get(tripId).get(userId) : -1;
     }
 
-    //trip enable tracking = "false", LocX and LocY = "0.0" by default
     public static void addNewTrip(String tripId, String description, String name) {
         if (tripInfo == null) {
             tripInfo = new HashMap<>();

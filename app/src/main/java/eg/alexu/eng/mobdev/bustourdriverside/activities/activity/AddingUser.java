@@ -71,7 +71,7 @@ public class AddingUser extends AppCompatActivity {
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    matchUsers(dataSnapshot);
+                                        matchUsers(dataSnapshot);
                                 }
 
                                 @Override

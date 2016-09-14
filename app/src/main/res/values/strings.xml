@@ -10,7 +10,7 @@
     <string name="delete_trip">Are you sure you want to delete this trip ?</string>
     <string name="text_empty">Please enter text</string>
     <string name="add_user">Are you sure you want to add this user to the current trip ?</string>
-    <string name="user_created">User created successfully</string>
+    <string name="user_created">User added successfully</string>
     <string name="done">Done</string>
     <string name="continue_trip">Do you want to stop this trip ?</string>
     <string name="title_activity_all_users_location_on_map">Map</string>

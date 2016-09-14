@@ -25,7 +25,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.List;
+
 import eg.alexu.eng.mobdev.bustourdriverside.R;
 import eg.alexu.eng.mobdev.bustourdriverside.activities.service.DriverLocationService;
 import eg.alexu.eng.mobdev.bustourdriverside.activities.utilities.Constants;
@@ -35,6 +37,7 @@ public class LocalUsersRecyclerAdapter extends RecyclerView.Adapter<LocalUsersRe
 
     private List<String> mUsersIds;
     private String mTripId;
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item, parent, false);
@@ -55,7 +58,8 @@ public class LocalUsersRecyclerAdapter extends RecyclerView.Adapter<LocalUsersRe
         dbRef.child(Constants.USERS).child(userId).child(Constants.NAME).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                holder.userName.setText(dataSnapshot.getValue(String.class));
+                if (dataSnapshot.exists())
+                    holder.userName.setText(dataSnapshot.getValue(String.class));
             }
 
             @Override
@@ -70,8 +74,10 @@ public class LocalUsersRecyclerAdapter extends RecyclerView.Adapter<LocalUsersRe
         dbRef.child(Constants.USERS).child(userId).child(Constants.PHONE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String phone = dataSnapshot.getValue(String.class);
-                holder.userPhone.setText(phone);
+                if (dataSnapshot.exists()) {
+                    String phone = dataSnapshot.getValue(String.class);
+                    holder.userPhone.setText(phone);
+                }
             }
 
             @Override
@@ -82,7 +88,6 @@ public class LocalUsersRecyclerAdapter extends RecyclerView.Adapter<LocalUsersRe
     }
 
     private void addPhoto(final ViewHolder holder, String userId) {
-        Log.d("Hamada", ""+FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
         dbRef.child(Constants.USERS)
                 .child(userId)
@@ -99,7 +104,7 @@ public class LocalUsersRecyclerAdapter extends RecyclerView.Adapter<LocalUsersRe
                                     .placeholder(R.drawable.user)
                                     .error(R.drawable.user)
                                     .centerCrop()
-                                    .override(25, 25).
+                                    .override(40, 40).
                                     into(new BitmapImageViewTarget(holder.userPhoto) {
                                         @Override
                                         protected void setResource(Bitmap resource) {
