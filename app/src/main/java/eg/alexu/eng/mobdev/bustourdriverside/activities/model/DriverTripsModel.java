@@ -53,8 +53,8 @@ public class DriverTripsModel {
         hm.put(Constants.NAME, name);//tripName
         hm.put(Constants.DESCRIPTION, description);
         hm.put(Constants.ENABLE_TRACKING, "false");
-        hm.put(Constants.LOC_X, "0.0");
-        hm.put(Constants.LOC_Y, "0.0");
+        hm.put(Constants.LOC_X, Constants.NO_VALUE);
+        hm.put(Constants.LOC_Y, Constants.NO_VALUE);
         hm.put(Constants.ARRIVED, "false");
         tripInfo.put(tripId, hm);
     }
