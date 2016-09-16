@@ -34,7 +34,8 @@ public class LoginActivity extends AppCompatActivity {
                                     AuthUI.EMAIL_PROVIDER,
                                     AuthUI.GOOGLE_PROVIDER
                             )
-
+                            .setLogo(R.drawable.back)
+                            .setTheme(R.style.loginScreen)
                             .build(),
                     RC_SIGN_IN);
         }
