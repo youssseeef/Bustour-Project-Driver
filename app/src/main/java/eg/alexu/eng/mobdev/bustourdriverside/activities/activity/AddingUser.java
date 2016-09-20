@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,6 +47,8 @@ public class AddingUser extends AppCompatActivity {
     }
 
     private void initializeFields() {
+        if (Firebase.getDefaultConfig() != null)
+            Firebase.getDefaultConfig().setPersistenceEnabled(true);
         mAddUserRecyclerView = (RecyclerView) findViewById(R.id.search_user_recycler_view);
         mSearchEditText = (EditText) findViewById(R.id.search_user_edit_text);
         mSearchImageView = (ImageView) findViewById(R.id.search_user_image_view);

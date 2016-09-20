@@ -52,25 +52,26 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void addListenerToProfileData() {
-        if (!isNewUser) {
-            dbRef.child(Constants.DRIVERS).
-                    child(fba.getCurrentUser().getUid()).
-                    addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                String name = dataSnapshot.child(Constants.NAME).getValue(String.class);
-                                String phone = dataSnapshot.child(Constants.PHONE).getValue(String.class);
-                                setProfile(name, phone);
+        if (FirebaseAuth.getInstance() != null && dbRef != null)
+            if (!isNewUser) {
+                dbRef.child(Constants.DRIVERS).
+                        child(fba.getCurrentUser().getUid()).
+                        addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    String name = dataSnapshot.child(Constants.NAME).getValue(String.class);
+                                    String phone = dataSnapshot.child(Constants.PHONE).getValue(String.class);
+                                    setProfile(name, phone);
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.d(TAG, databaseError.getMessage());
-                        }
-                    });
-        }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.d(TAG, databaseError.getMessage());
+                            }
+                        });
+            }
     }
 
     private void setProfile(String fullName, String phone) {
@@ -80,17 +81,17 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void onClickSave(View v) {
         boolean wrongEntry = false;
-        if(nameEditText.getText().toString().trim().equals("")){
+        if (nameEditText.getText().toString().trim().equals("")) {
             nameEditText.setError("Required!");
             wrongEntry = true;
         }
 
-        if(phoneEditText.getText().toString().trim().length() < 10){
+        if (phoneEditText.getText().toString().trim().length() < 10) {
             phoneEditText.setError("Enter a valid phone!");
             wrongEntry = true;
         }
 
-        if(!wrongEntry) {
+        if (!wrongEntry && fba != null) {
             Model.getInstance().submitDataFirstTime(fba.getCurrentUser().getUid(),
                     nameEditText.getText().toString(),
                     phoneEditText.getText().toString(),
@@ -104,32 +105,29 @@ public class ProfileActivity extends AppCompatActivity {
         userPhoto = (ImageView) findViewById(R.id.user_photo_imageView_profile);
         nameEditText = (EditText) findViewById(R.id.profile_name_edittext);
         phoneEditText = (EditText) findViewById(R.id.profile_phone_edittext);
-        Firebase.setAndroidContext(this);
-        if (Firebase.getDefaultConfig().isPersistenceEnabled() == false) {
-            Firebase.getDefaultConfig().setPersistenceEnabled(true);
-        }
-        Glide.with(userPhoto.getContext())
-                .load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl())
-                .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.user)
-                .error(R.drawable.user)
-                .centerCrop()
-                .override(500, 500).
-                into(new BitmapImageViewTarget(userPhoto) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(userPhoto.getResources(), resource);
-                        circularBitmapDrawable.setCircular(true);
-                        userPhoto.setImageDrawable(circularBitmapDrawable);
-                    }
-                });
+        if (FirebaseAuth.getInstance() != null)
+            Glide.with(userPhoto.getContext())
+                    .load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl())
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.user)
+                    .error(R.drawable.user)
+                    .centerCrop()
+                    .override(500, 500).
+                    into(new BitmapImageViewTarget(userPhoto) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(userPhoto.getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            userPhoto.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
         fba = FirebaseAuth.getInstance();
         dbRef = FirebaseDatabase.getInstance().getReference();
         isNewUser = getIntent().getBooleanExtra(Extras.IS_NEW_USER, false);
-        if (!fba.getCurrentUser().getDisplayName().equals("") ||
-                fba.getCurrentUser().getDisplayName() != null) {
+        if (fba != null && fba.getCurrentUser() != null && (fba.getCurrentUser().getDisplayName() != null && !fba.getCurrentUser().getDisplayName().equals(""))
+                ) {
             nameEditText.setText(fba.getCurrentUser().getDisplayName());
         }
     }

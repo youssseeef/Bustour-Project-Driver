@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -27,6 +28,8 @@ public class CreateNewTripActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_trip);
+        if (Firebase.getDefaultConfig() != null)
+            Firebase.getDefaultConfig().setPersistenceEnabled(true);
         mTripName = (EditText) findViewById(R.id.add_trip_name);
         mTripDate = (EditText) findViewById(R.id.add_trip_date);
         mTripDescription = (EditText) findViewById(R.id.add_trip_description);
