@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "61342361748-hugu4id89at4qo83nb3om764j9v50abq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eg.alexu.eng.mobdev.bustourdriverside",
+            "certificate_hash": "5F5438B72201BB029D4B87A76160FCE91FDA25C4"
+          }
+        },
+        {
           "client_id": "61342361748-ed6p43v3ivpluvkn1fq336rkkgj4di6e.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -29,7 +37,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAtt2CIbcFQ1jEf0fL0mVX1O99tdWosh9M"
+          "current_key": "AIzaSyALSae58AvYV8ICXoCApHvQRs44DBYzB2E"
         }
       ],
       "services": {
@@ -37,8 +45,65 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "61342361748-j4c08rb40ud7m3urhsbq74ijvibblj3v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:61342361748:android:648281be0b6a8151",
+        "android_client_info": {
+          "package_name": "eg.alexu.eng.mobdev.bustourclientside"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "61342361748-6mmkhrga9d6bgb7hki20s6m89o9ar7hf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eg.alexu.eng.mobdev.bustourclientside",
+            "certificate_hash": "2618E8BC724B2A72F6C4C7F747060FD4A874874D"
+          }
+        },
+        {
+          "client_id": "61342361748-o25o26tb434hl2gsn9ujqkgqsf0kv6tu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eg.alexu.eng.mobdev.bustourclientside",
+            "certificate_hash": "3776D6889615BC4B0C1B1D333716BC6C47DBF14B"
+          }
+        },
+        {
+          "client_id": "61342361748-j4c08rb40ud7m3urhsbq74ijvibblj3v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALSae58AvYV8ICXoCApHvQRs44DBYzB2E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "61342361748-j4c08rb40ud7m3urhsbq74ijvibblj3v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
