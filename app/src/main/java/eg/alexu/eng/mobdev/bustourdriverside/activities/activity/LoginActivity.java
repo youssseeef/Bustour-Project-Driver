@@ -16,8 +16,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         setContentView(R.layout.activity_login);
+        try{
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        }catch(Exception ex){
+            //This is bad. really bad but we had to do this!
+        }
         doLogin();
     }
 

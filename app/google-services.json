@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "61342361748-clgho89io915jhmn5cj9gqt54o6bsekl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eg.alexu.eng.mobdev.bustourdriverside",
+            "certificate_hash": "902CD16E5189608C6CE2D1BD0874C5A8E86B2011"
+          }
+        },
+        {
           "client_id": "61342361748-hugu4id89at4qo83nb3om764j9v50abq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -66,6 +74,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "61342361748-4f7ign22lbalhp10q7rslkpd9slplljf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eg.alexu.eng.mobdev.bustourclientside",
+            "certificate_hash": "902CD16E5189608C6CE2D1BD0874C5A8E86B2011"
+          }
+        },
         {
           "client_id": "61342361748-6mmkhrga9d6bgb7hki20s6m89o9ar7hf.apps.googleusercontent.com",
           "client_type": 1,
