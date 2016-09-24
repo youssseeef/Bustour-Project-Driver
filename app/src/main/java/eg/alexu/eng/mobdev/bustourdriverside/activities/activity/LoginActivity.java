@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.FirebaseDatabase;
 
 import eg.alexu.eng.mobdev.bustourdriverside.R;
@@ -19,7 +20,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         try{
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        }catch(Exception ex){
+        }catch(DatabaseException ex){
             //This is bad. really bad but we had to do this!
         }
         doLogin();
