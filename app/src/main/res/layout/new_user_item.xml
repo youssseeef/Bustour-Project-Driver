@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="User Dummy Info"
+            android:text="User Info"
             android:id="@+id/phone_text_view"
             android:layout_below="@+id/user_name_text_view"
             android:layout_alignParentLeft="true"

@@ -42,7 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".7"
-            android:text="Paula Boules"
+            android:text="User Name"
             android:gravity="center"
             android:id="@+id/user_name_during_trip"
 
@@ -68,7 +68,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight=".7"
-            android:text="012345678"
+            android:text="00000000"
             android:gravity="center"
             android:id="@+id/user_phone_during_trip"
             />
